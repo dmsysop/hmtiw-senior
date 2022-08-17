@@ -15,3 +15,4 @@ So you need to go over [Plataform](https://platform.senior.com.br/login/) log-in
 - Configurable hours goal
 - Login in the app
 - Balance column and total for it
+
