@@ -5,7 +5,7 @@ import {
   FormLabel,
   Input
 } from '@chakra-ui/react'
-import { useSeniorContext } from '../../hooks/useSenior'
+import { useSeniorContext } from '../../../hooks/useSenior'
 
 export const TokenForm = () => {
   const { saveToken } = useSeniorContext()
