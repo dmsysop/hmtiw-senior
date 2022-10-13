@@ -1,37 +1,17 @@
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormErrorMessage,
-  FormHelperText,
-  Heading,
-  Input,
-  Stack
-} from '@chakra-ui/react'
-import { useState } from 'react'
-
-type Inputs = {
-  domain: string
-  password: string
-}
+import { Box, Button, Flex, Heading, Input, Stack } from '@chakra-ui/react'
+import { useRef } from 'react'
 
 export const LoginForm = () => {
-  const [inputs, setInputs] = useState<Inputs>({
-    domain: '',
-    password: ''
-  })
+  const domainInputRef = useRef<HTMLInputElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
 
-  const handleOnChange: React.ChangeEventHandler<HTMLInputElement> = ({
-    target
-  }) => {
-    const { name, value } = target
-    setInputs((prevInputs) => ({ ...prevInputs, [name]: value }))
-  }
+  const handleOnSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault()
 
-  const error = {
-    domain: inputs.domain === '',
-    password: inputs.password === ''
+    const domain = domainInputRef.current?.value
+    const password = passwordInputRef.current?.value
+
+    if ([domain, password].some((value) => value === '')) return
   }
 
   return (
@@ -49,34 +29,20 @@ export const LoginForm = () => {
       >
         <Heading color="green.400">Welcome</Heading>
         <Box minW={{ base: '90%', md: '468px' }}>
-          <form>
+          <form onSubmit={handleOnSubmit}>
             <Stack spacing={4} p="1rem" boxShadow="md">
-              <FormControl isInvalid={error.domain}>
-                <Input
-                  name="domain"
-                  placeholder="Domail address"
-                  onChange={handleOnChange}
-                />
-                {error.domain && (
-                  <FormErrorMessage>Insira o dominio.</FormErrorMessage>
-                )}
-              </FormControl>
-              <FormControl isInvalid={error.password}>
-                <Input
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  onChange={handleOnChange}
-                />
-                {error.password && (
-                  <FormErrorMessage>Insira a senha.</FormErrorMessage>
-                )}
-              </FormControl>
-              <Button
-                disabled={error.domain || error.password}
-                type="submit"
-                width="full"
-              >
+              <Input
+                name="domain"
+                placeholder="Domail address"
+                ref={domainInputRef}
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                ref={passwordInputRef}
+              />
+              <Button type="submit" width="full">
                 Login
               </Button>
             </Stack>
