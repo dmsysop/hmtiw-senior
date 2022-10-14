@@ -1,17 +1,22 @@
 import { Box, Button, Flex, Heading, Input, Stack } from '@chakra-ui/react'
 import { useRef } from 'react'
+import { useSeniorContext } from '../../../hooks/useSenior'
 
 export const LoginForm = () => {
+  const { authenticate } = useSeniorContext()
+
   const domainInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
   const handleOnSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault()
 
-    const domain = domainInputRef.current?.value
-    const password = passwordInputRef.current?.value
+    const domain = domainInputRef.current!.value
+    const password = passwordInputRef.current!.value
 
     if ([domain, password].some((value) => value === '')) return
+
+    authenticate({ user: domain, password })
   }
 
   return (
