@@ -1,10 +1,12 @@
 import { Box, Button, Flex, Heading, Input, Stack } from '@chakra-ui/react'
 import { useRef } from 'react'
-import { useSeniorContext } from '../../../hooks/useSenior'
+import { AuthCredentialRequest } from '../../../services/senior/dtos/auth-data'
 
-export const LoginForm = () => {
-  const { authenticate } = useSeniorContext()
+type LoginFormProps = {
+  authenticate: (data: AuthCredentialRequest) => void
+}
 
+export const LoginForm = ({ authenticate }: LoginFormProps) => {
   const domainInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
