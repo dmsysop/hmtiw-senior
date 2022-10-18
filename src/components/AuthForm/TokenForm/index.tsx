@@ -5,13 +5,15 @@ import {
   FormLabel,
   Input
 } from '@chakra-ui/react'
-import { useSeniorContext } from '../../../hooks/useSenior'
 
-export const TokenForm = () => {
-  const { saveToken } = useSeniorContext()
+type TokenFormProps = {
+  saveToken: (token: string) => void
+}
 
+export const TokenForm = ({ saveToken }: TokenFormProps) => {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event?.preventDefault()
+    if (!event.currentTarget.token.value) return
     saveToken(event.currentTarget.token.value)
   }
 
