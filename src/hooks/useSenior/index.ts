@@ -42,7 +42,7 @@ export const useSenior = () => {
 
   const authenticate = async (data: AuthCredentialRequest) => {
     const token = await login(data)
-    if (token instanceof AxiosError) return
+    if (token instanceof AxiosError) return tokenError()
     saveToken(token)
   }
 
