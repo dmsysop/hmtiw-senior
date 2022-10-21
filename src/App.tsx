@@ -1,4 +1,4 @@
-import { TokenForm } from './components/TokenForm'
+import { AuthForm } from './components/AuthForm'
 import { Center, Spinner, VStack } from '@chakra-ui/react'
 import { useSeniorContext } from './hooks/useSenior'
 import { WorkClock } from './components/WorkClock'
@@ -29,8 +29,8 @@ function App() {
     )
 
   return (
-    <Center mt="10%">
-      <TokenForm />
+    <Center display={'column'} mt="10%">
+      <AuthForm />
     </Center>
   )
 }
