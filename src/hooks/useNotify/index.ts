@@ -10,6 +10,13 @@ export const useNotify = () => {
       status: 'error'
     })
 
+  const authenticationError = () =>
+    t({
+      title: 'usuário/senha inválido!',
+      description: 'O usuário/senha informado é inválido',
+      status: 'error'
+    })
+
   const requestWarning = () =>
     t({
       title: 'Ops..!',
@@ -27,6 +34,7 @@ export const useNotify = () => {
   return {
     tokenError,
     requestWarning,
-    congratulations
+    congratulations,
+    authenticationError
   }
 }
