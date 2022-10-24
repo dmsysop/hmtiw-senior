@@ -20,7 +20,7 @@ export const useSenior = () => {
   const [clockingEvents, setClockingEvents] = useState<Date[]>([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
-  const { requestWarning, tokenError } = useNotify()
+  const { requestWarning, tokenError, authenticationError } = useNotify()
 
   const loadClockingEvents = async () => {
     setLoading(true)
@@ -42,7 +42,7 @@ export const useSenior = () => {
 
   const authenticate = async (data: AuthCredentialRequest) => {
     const token = await login(data)
-    if (token instanceof AxiosError) return tokenError()
+    if (token instanceof AxiosError) return authenticationError()
     saveToken(token)
   }
 
