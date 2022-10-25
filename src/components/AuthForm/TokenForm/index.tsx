@@ -25,7 +25,7 @@ export const TokenForm = ({ saveToken }: TokenFormProps) => {
         </FormLabel>
         <Input placeholder="Token" id="token" required />
         <FormHelperText>Token obtido no login na Senior</FormHelperText>
-        <Button type="submit" mt="4" width="100%">
+        <Button type="submit" mt="4" width="full">
           Continuar
         </Button>
       </FormControl>
