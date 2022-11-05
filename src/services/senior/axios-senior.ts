@@ -5,5 +5,5 @@ export const axiosSenior: AxiosInstance = axios.create({
 })
 
 export const axiosSeniorGetaway: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3001/'
+  baseURL: 'https://snr-getaway.fly.dev/'
 })
