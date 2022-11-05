@@ -7,18 +7,18 @@ import {
 } from '@chakra-ui/react'
 
 type TokenFormProps = {
-  saveToken: (token: string) => void
+  onSubmit: (token: string) => void
 }
 
-export const TokenForm = ({ saveToken }: TokenFormProps) => {
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+export const TokenForm = ({ onSubmit }: TokenFormProps) => {
+  const handleOnSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event?.preventDefault()
     if (!event.currentTarget.token.value) return
-    saveToken(event.currentTarget.token.value)
+    onSubmit(event.currentTarget.token.value)
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleOnSubmit}>
       <FormControl textAlign="center">
         <FormLabel htmlFor="token" fontWeight="bold">
           Token de autenticação

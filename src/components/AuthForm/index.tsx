@@ -15,9 +15,9 @@ export const AuthForm = () => {
   return (
     <>
       {typeForm ? (
-        <LoginForm authenticate={authenticate} />
+        <LoginForm onSubmit={(credentials) => authenticate(credentials)} />
       ) : (
-        <TokenForm saveToken={saveToken} />
+        <TokenForm onSubmit={(token) => saveToken(token)} />
       )}
       <Text
         color="green.400"

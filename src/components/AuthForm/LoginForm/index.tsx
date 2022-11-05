@@ -2,11 +2,13 @@ import { Box, Button, Flex, Heading, Input, Stack } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { AuthCredentialRequest } from '../../../services/senior/dtos/auth-data'
 
+type Credentials = AuthCredentialRequest
+
 type LoginFormProps = {
-  authenticate: (data: AuthCredentialRequest) => void
+  onSubmit: (credentials: Credentials) => void
 }
 
-export const LoginForm = ({ authenticate }: LoginFormProps) => {
+export const LoginForm = ({ onSubmit }: LoginFormProps) => {
   const domainInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
 
@@ -18,7 +20,7 @@ export const LoginForm = ({ authenticate }: LoginFormProps) => {
 
     if ([domain, password].some((value) => value === '')) return
 
-    authenticate({ user: domain, password })
+    onSubmit({ user: domain, password })
   }
 
   return (
