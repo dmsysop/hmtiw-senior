@@ -5,25 +5,27 @@ import {
   FormLabel,
   Input
 } from '@chakra-ui/react'
-import { useSeniorContext } from '../../hooks/useSenior'
 
-export const TokenForm = () => {
-  const { saveToken } = useSeniorContext()
+type TokenFormProps = {
+  onSubmit: (token: string) => void
+}
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+export const TokenForm = ({ onSubmit }: TokenFormProps) => {
+  const handleOnSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event?.preventDefault()
-    saveToken(event.currentTarget.token.value)
+    if (!event.currentTarget.token.value) return
+    onSubmit(event.currentTarget.token.value)
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleOnSubmit}>
       <FormControl textAlign="center">
         <FormLabel htmlFor="token" fontWeight="bold">
           Token de autenticação
         </FormLabel>
         <Input placeholder="Token" id="token" required />
         <FormHelperText>Token obtido no login na Senior</FormHelperText>
-        <Button type="submit" mt="4" width="100%">
+        <Button type="submit" mt="4" width="full">
           Continuar
         </Button>
       </FormControl>
