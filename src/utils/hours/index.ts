@@ -28,15 +28,12 @@ export const timeSpent = (events: Date[], currentDate?: Date): WorkingHours => {
   }
 }
 
-export const monthEventsGroup = (clockingEvents: Date[]) => {
-  const today = new Date()
+export const monthEventsGroup = (clockingEvents: Date[], year: number) => {
   const days = Array.from({ length: 12 }, () =>
     Array.from({ length: 31 }, () => new Array(0))
   )
 
-  const dates = clockingEvents.filter(
-    (date) => date.getFullYear() === today.getFullYear()
-  )
+  const dates = clockingEvents.filter((date) => date.getFullYear() === year)
 
   dates.forEach((date) => {
     days[date.getMonth()][date.getDate() - 1].push(date)
