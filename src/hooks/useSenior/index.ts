@@ -17,6 +17,7 @@ export const useSeniorContext = () => useContext(SeniorContext)!
 
 export const useSenior = () => {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [year, setYear] = useState(new Date().getFullYear())
   const [clockingEvents, setClockingEvents] = useState<Date[]>([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
@@ -53,7 +54,7 @@ export const useSenior = () => {
     currentDate
   )
 
-  const monthlyReport: DailyData[][] = monthEventsGroup(clockingEvents)
+  const monthlyReport: DailyData[][] = monthEventsGroup(clockingEvents, year)
 
   const todayEvents = clockingEvents
     .filter((date) => date.toDateString() === new Date().toDateString())
@@ -100,6 +101,8 @@ export const useSenior = () => {
     todayEvents,
     monthlyReport,
     saveToken,
-    loading
+    loading,
+    year,
+    setYear
   }
 }
