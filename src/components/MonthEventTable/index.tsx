@@ -13,6 +13,18 @@ export type MonthEventTableProps = {
   data: DailyData[]
 }
 
+const calculateHoursDifference = (hours: string) => {
+  const workedHours = Number(hours)
+  const expectedHoursPerDay = 8
+
+  if (workedHours === 0) {
+    return 'Folga'
+  }
+
+  const hoursDifference = workedHours - expectedHoursPerDay
+  return `${hoursDifference >= 0 ? '+' : ''}${hoursDifference}`
+}
+
 export const MonthEventTable = ({ data }: MonthEventTableProps) => {
   const colorRule = (open: boolean, hours: string) =>
     !open && Number(hours) >= 8 ? 'green.400' : 'red.400'
@@ -36,7 +48,8 @@ export const MonthEventTable = ({ data }: MonthEventTableProps) => {
                   {timestamps}
                 </Td>
                 <Td color={colorRule(open, hours)} isNumeric>
-                  {open ? 'Incompleto' : `${hours}:${minutes}`}
+                  {open ? 'Incompleto' : `${hours}:${minutes}`}{' '}
+                  {!open && calculateHoursDifference(hours)}
                 </Td>
               </Tr>
             )
