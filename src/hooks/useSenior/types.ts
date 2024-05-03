@@ -7,5 +7,5 @@ export type WorkingHours = {
 export type DailyData = {
   timestamps: string
   totalHours: WorkingHours
-  date: number
+  day: number
 }

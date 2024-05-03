@@ -4,9 +4,9 @@ import { MonthEventTable } from '../components/MonthEventTable'
 import { useSeniorContext } from '../hooks/useSenior'
 
 export const History = () => {
-  const { monthlyReport, year, setYear } = useSeniorContext()
-  const [value, setValue] = useState(-1)
   const date = new Date()
+  const { monthlyReport, year, setYear } = useSeniorContext()
+  const [value, setValue] = useState(date.getMonth())
   const currentYear = date.getFullYear()
 
   return (
@@ -44,7 +44,7 @@ export const History = () => {
         </Select>
       </HStack>
 
-      {value >= 0 && <MonthEventTable data={monthlyReport[value]} />}
+      {value >= 0 && <MonthEventTable year={year} month={value} data={monthlyReport[value]} />}
     </VStack>
   )
 }
