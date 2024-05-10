@@ -48,7 +48,7 @@ export const monthEventsGroup = (clockingEvents: Date[], year: number) => {
       return {
         timestamps,
         totalHours: timeSpent(day),
-        date: index + 1
+        day: index + 1
       }
     })
   })
