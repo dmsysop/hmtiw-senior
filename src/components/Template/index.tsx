@@ -22,6 +22,9 @@ export const Template = ({ children }: TemplateProps) => {
           <Link to="/historico">
             <Text>Histórico</Text>
           </Link>
+          <Link to="/saldo">
+            <Text>Saldo de horas</Text>
+          </Link>
         </HStack>
 
         <ToggleButton />

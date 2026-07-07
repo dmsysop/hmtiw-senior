@@ -44,7 +44,13 @@ export const History = () => {
         </Select>
       </HStack>
 
-      {value >= 0 && <MonthEventTable year={year} month={value} data={monthlyReport[value]} />}
+      {value >= 0 && (
+        <MonthEventTable
+          year={year}
+          month={value}
+          data={monthlyReport[value]}
+        />
+      )}
     </VStack>
   )
 }
