@@ -3,6 +3,7 @@ import { Center, Spinner, VStack } from '@chakra-ui/react'
 import { useSeniorContext } from './hooks/useSenior'
 import { WorkClock } from './components/WorkClock'
 import { PunchMap } from './components/PunchMap'
+import { ChangePasswordModal } from './components/ChangePasswordModal'
 import { motion } from 'framer-motion'
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <WorkClock />
           <PunchMap events={todayClockingEvents} />
         </VStack>
+        <ChangePasswordModal />
       </motion.div>
     )
 

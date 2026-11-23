@@ -16,3 +16,29 @@ export const login = async ({ user, password }: AuthCredentialRequest) => {
     return error as AxiosError
   }
 }
+
+export const usernameOf = (user: string) => user.split('@')[0]
+
+// senha padrão da Senior é o próprio usuário (CPF)
+export const isDefaultPassword = ({ user, password }: AuthCredentialRequest) =>
+  password === usernameOf(user) || password === user
+
+export const changePassword = async (
+  token: string,
+  { user, password }: AuthCredentialRequest,
+  newPassword: string
+) => {
+  try {
+    await axiosSenior.post(
+      't/senior.com.br/bridge/1.0/rest/platform/user/actions/changePassword',
+      { username: usernameOf(user), currentPassword: password, newPassword },
+      { headers: { Authorization: 'bearer ' + token } }
+    )
+    return null
+  } catch (error) {
+    return (
+      (error as AxiosError<{ message?: string }>).response?.data?.message ??
+      'Não foi possível trocar a senha'
+    )
+  }
+}

@@ -10,7 +10,11 @@ import {
 import { useNotify } from '../useNotify'
 import { monthEventsGroup, timeSpent } from '../../utils/hours'
 import { ClockingEvent, DailyData } from './types'
-import { login } from '../../services/senior/login'
+import {
+  changePassword,
+  isDefaultPassword,
+  login
+} from '../../services/senior/login'
 import { AuthCredentialRequest } from '../../services/senior/dtos/auth-data'
 
 export const useSeniorContext = () => useContext(SeniorContext)!
@@ -21,6 +25,9 @@ export const useSenior = () => {
   const [clockingEvents, setClockingEvents] = useState<ClockingEvent[]>([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState(getTokenCookie() ?? '')
+  // só em memória: credencial de quem entrou com a senha padrão (CPF)
+  const [defaultCredentials, setDefaultCredentials] =
+    useState<AuthCredentialRequest | null>(null)
   const { requestWarning, tokenError, authenticationError } = useNotify()
 
   const loadClockingEvents = async (silent = false) => {
@@ -43,8 +50,17 @@ export const useSenior = () => {
   const authenticate = async (data: AuthCredentialRequest) => {
     const token = await login(data)
     if (token instanceof Error) return authenticationError()
+    if (isDefaultPassword(data)) setDefaultCredentials(data)
     saveToken(token)
   }
+
+  const updatePassword = async (newPassword: string) => {
+    const error = await changePassword(token, defaultCredentials!, newPassword)
+    if (!error) setDefaultCredentials(null)
+    return error
+  }
+
+  const dismissPasswordChange = () => setDefaultCredentials(null)
 
   const todayClockingEvents = clockingEvents.filter(
     ({ date }) => date.toDateString() === new Date().toDateString()
@@ -68,6 +84,7 @@ export const useSenior = () => {
 
   const logout = () => {
     setToken('')
+    setDefaultCredentials(null)
     setClockingEvents([])
     removeTokenCookie()
   }
@@ -106,6 +123,9 @@ export const useSenior = () => {
   return {
     token,
     authenticate,
+    mustChangePassword: defaultCredentials !== null,
+    updatePassword,
+    dismissPasswordChange,
     setToken,
     clockingEvents,
     todayClockingEvents,
