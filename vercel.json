@@ -1,6 +1,10 @@
 {
     "routes": [
         {
+            "src": "/watchman/(.*)",
+            "dest": "https://watchman-gazintech.azurewebsites.net/$1"
+        },
+        {
             "src": "/[^.]+",
             "dest": "/",
             "status": 200

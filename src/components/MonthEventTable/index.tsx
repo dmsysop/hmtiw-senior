@@ -22,16 +22,19 @@ import {
 import { useState } from 'react'
 import { DailyData } from '../../hooks/useSenior/types'
 import { MapPinIcon, PunchMap, isLocated } from '../PunchMap'
+import { OnCallShift } from '../../services/watchman'
 import {
   minutesPerHour,
   minutesToHoursAndMinutes,
-  summarizeDay
+  onCallWorkedMinutes,
+  summarizeOnCallDay
 } from './summarize'
 
 export type MonthEventTableProps = {
   data: DailyData[]
   year: number
   month: number
+  onCall?: OnCallShift[]
 }
 
 const formatTime = (date: Date) =>
@@ -43,7 +46,8 @@ const scheme = (color: string) => color.split('.')[0]
 export const MonthEventTable = ({
   data,
   year,
-  month
+  month,
+  onCall = []
 }: MonthEventTableProps) => {
   const [mapDay, setMapDay] = useState<DailyData | null>(null)
   const cardBg = useColorModeValue('white', 'gray.700')
@@ -61,7 +65,21 @@ export const MonthEventTable = ({
     .filter(({ day }) => day <= lastDay)
     .map((dailyData) => ({
       ...dailyData,
-      summary: summarizeDay(year, month, dailyData.day, dailyData.totalHours)
+      onCall: onCall.some(
+        ({ start, end }) =>
+          start < new Date(year, month, dailyData.day + 1) &&
+          end > new Date(year, month, dailyData.day)
+      ),
+      summary: summarizeOnCallDay(
+        year,
+        month,
+        dailyData.day,
+        dailyData.totalHours,
+        onCallWorkedMinutes(
+          dailyData.events.map(({ date }) => date),
+          onCall
+        )
+      )
     }))
     .reverse()
 
@@ -74,6 +92,12 @@ export const MonthEventTable = ({
       open ? total : total + Number(hours) * minutesPerHour + Number(minutes),
     0
   )
+  const receivedMinutes = days.reduce(
+    (total, { summary }) => total + summary.receivedMinutes,
+    0
+  )
+  const onCallMinutes =
+    onCall.reduce((total, { hours }) => total + hours, 0) * minutesPerHour
   const workedDays = days.filter(({ events }) => events.length > 0).length
 
   const stats = [
@@ -89,12 +113,30 @@ export const MonthEventTable = ({
         minutesToHoursAndMinutes(balanceMinutes),
       color: balanceMinutes < 0 ? 'red.400' : 'green.400'
     },
-    { label: 'Dias', value: String(workedDays), color: undefined }
+    { label: 'Dias', value: String(workedDays), color: undefined },
+    ...(onCall.length > 0
+      ? [
+          {
+            label: 'Recebidas',
+            value: minutesToHoursAndMinutes(receivedMinutes),
+            color: 'purple.400'
+          },
+          {
+            label: 'Sobreaviso',
+            value: minutesToHoursAndMinutes(onCallMinutes),
+            color: undefined
+          }
+        ]
+      : [])
   ]
 
   return (
     <VStack width="full" spacing="3">
-      <SimpleGrid columns={3} spacing="3" width="full">
+      <SimpleGrid
+        columns={{ base: 3, md: stats.length }}
+        spacing="3"
+        width="full"
+      >
         {stats.map(({ label, value, color }) => (
           <Stat
             key={label}
@@ -117,6 +159,7 @@ export const MonthEventTable = ({
         const {
           day,
           events,
+          onCall: isOnCall,
           summary,
           totalHours: { hours, minutes, open }
         } = dailyData
@@ -139,7 +182,12 @@ export const MonthEventTable = ({
             opacity={empty ? 0.6 : 1}
           >
             <VStack spacing="0" minW="10">
-              <Text fontSize={empty ? 'md' : 'xl'} fontWeight="bold">
+              <Text
+                fontSize={empty ? 'md' : 'xl'}
+                fontWeight="bold"
+                color={isOnCall ? 'purple.400' : undefined}
+                title={isOnCall ? 'Sobreaviso' : undefined}
+              >
                 {day}
               </Text>
               <Text fontSize="xs" color={mutedColor} textTransform="uppercase">
